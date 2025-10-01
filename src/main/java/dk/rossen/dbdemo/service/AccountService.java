@@ -45,7 +45,13 @@ public class AccountService {
                         .build()
         );
 
-        return new AccountResponse(account.getId(), account.getAccountNumber(), account.getAccountName(), account.getBalance());
+        return new AccountResponse(
+                account.getCustomer().getCustomerNumber(),
+                account.getAccountNumber(),
+                account.getAccountName(),
+                account.getBalance(),
+                account.getCreatedAt()
+        );
     }
 
     private String generateAccountNumber() {
@@ -57,7 +63,13 @@ public class AccountService {
     public AccountResponse getAccountByAccountNumber(String accountNumber) {
         Optional<Account> optionalAccount = accountsRepository.findByAccountNumber(accountNumber);
         Account account = optionalAccount.orElseThrow();
-        return new AccountResponse(account.getId(), account.getAccountNumber(), account.getAccountName(), account.getBalance());
+        return new AccountResponse(
+                account.getCustomer().getCustomerNumber(),
+                account.getAccountNumber(),
+                account.getAccountName(),
+                account.getBalance(),
+                account.getCreatedAt()
+        );
     }
 
     @Transactional

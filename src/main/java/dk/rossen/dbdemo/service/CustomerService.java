@@ -21,14 +21,20 @@ public class CustomerService {
     public CustomerResponse createCustomer(@Valid NewCustomerRequest newCustomerRequest) {
         customerNumberExists(newCustomerRequest.customerNumber());
 
-        Customer customerEntity = customerRepository.save(
+        Customer customer = customerRepository.save(
                 Customer.builder()
                         .firstName(newCustomerRequest.firstName())
                         .lastName(newCustomerRequest.lastName())
                         .customerNumber(newCustomerRequest.customerNumber())
                         .build()
         );
-        return new CustomerResponse(customerEntity.getId(), customerEntity.getCustomerNumber(), customerEntity.getFirstName(), customerEntity.getLastName(), null);
+        return new CustomerResponse(
+                customer.getCustomerNumber(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                null,
+                customer.getCreatedAt()
+        );
     }
 
     public CustomerResponse getCustomerByCustomerNumber(String customerNumber) {
@@ -38,20 +44,21 @@ public class CustomerService {
         if (!customer.getAccounts().isEmpty()) {
             accountResponseList = customer.getAccounts().stream().map(a ->
                     new AccountResponse(
-                            a.getId(),
+                            a.getCustomer().getCustomerNumber(),
                             a.getAccountNumber(),
                             a.getAccountName(),
-                            a.getBalance()
+                            a.getBalance(),
+                            a.getCreatedAt()
                     ))
                     .toList();
         }
 
         return new CustomerResponse(
-                customer.getId(),
                 customer.getCustomerNumber(),
                 customer.getFirstName(),
                 customer.getLastName(),
-                accountResponseList
+                accountResponseList,
+                customer.getCreatedAt()
         );
     }
 

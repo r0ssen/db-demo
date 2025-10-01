@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,6 +28,9 @@ class CustomerControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private MockMvc mockMvc;
 
     @MockitoBean
@@ -39,14 +43,14 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        CustomerResponse customerResponse = new CustomerResponse(1L, "1234", "Anders", "And", Collections.emptyList());
+        CustomerResponse customerResponse = new CustomerResponse("1234", "Anders", "And", Collections.emptyList(), LocalDateTime.now());
 
         when(customerService.getCustomerByCustomerNumber(anyString())).thenReturn(customerResponse);
 
         mockMvc.perform(
-                        get("/v1/customers/{customer-id}", customerResponse.id()))
+                        get("/v1/customers/{customer-id}", customerResponse.customerNumber()))
                 .andExpect(status().isOk()
-                ).andExpect(content().json(new ObjectMapper().writeValueAsString(customerResponse)));
+                ).andExpect(content().json(objectMapper.writeValueAsString(customerResponse)));
 
         verify(customerService).getCustomerByCustomerNumber(anyString());
     }
