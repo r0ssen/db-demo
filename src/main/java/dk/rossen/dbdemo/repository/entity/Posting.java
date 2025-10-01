@@ -37,7 +37,7 @@ public class Posting {
     private BigDecimal balance;
 
     @Column(name = "created_at")
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,6 +46,7 @@ public class Posting {
 
     @PrePersist
     private void prePersist() {
+        this.createdAt = LocalDateTime.now();
         if (StringUtils.isEmpty(this.postingText)) {
             this.postingText = "Transaction";
         }

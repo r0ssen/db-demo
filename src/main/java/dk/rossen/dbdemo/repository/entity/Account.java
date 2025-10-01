@@ -32,7 +32,7 @@ public class Account {
     private BigDecimal balance;
 
     @Column(name = "created_at")
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,6 +45,7 @@ public class Account {
 
     @PrePersist
     private void prePersist() {
+        this.createdAt = LocalDateTime.now();
         if (this.balance == null) {
             this.balance = BigDecimal.ZERO;
         }

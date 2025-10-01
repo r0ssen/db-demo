@@ -9,5 +9,6 @@ public record AccountPosting(
         String creditorAccountNumber,
         BigDecimal amount,
         String postingText,
-        BigDecimal balance) {
+        BigDecimal balance
+) {
 }

@@ -44,7 +44,7 @@ class AccountControllerTest {
     @Test
     void testCreateAccount() throws Exception {
         NewAccountRequest request = new NewAccountRequest("1234-123456", "New account");
-        AccountResponse response = new AccountResponse(1L, "ACC123", "New account", BigDecimal.ZERO);
+        AccountResponse response = new AccountResponse("1234-123456", "ACC123", "New account", BigDecimal.ZERO, LocalDateTime.now());
 
         Mockito.when(accountService.createAccount(any())).thenReturn(response);
 
@@ -58,7 +58,7 @@ class AccountControllerTest {
 
     @Test
     void testGetAccount() throws Exception {
-        AccountResponse response = new AccountResponse(1L,"ACC123", "New Account", BigDecimal.valueOf(1000));
+        AccountResponse response = new AccountResponse("1234-123456","ACC123", "New Account", BigDecimal.valueOf(1000), LocalDateTime.now());
 
         Mockito.when(accountService.getAccountByAccountNumber("ACC123")).thenReturn(response);
 
